@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import Com.atm.entity.User;
+import Com.atm.exception.UserAlreadyExistsException;
 import Com.atm.exception.UserNotFoundException;
 import Com.atm.repository.UserRepository;
 @Service
@@ -18,6 +19,9 @@ public class UserServiceimpl implements  UserService{
 	private UserRepository userRepository;
 
      public User createUser(User user) {
+         if (userRepository.findByUsername(user.getUsername()) != null) {
+             throw new UserAlreadyExistsException("User with username " + user.getUsername() + " already exists.");
+         }
          return userRepository.save(user);
      }
 
