@@ -17,8 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 	
 
-	private static final String ADMIN = "ADMIN";
-	private static final String USER = "USER";
 
 	
 	@Bean
@@ -29,19 +27,19 @@ public class SecurityConfiguration {
 	@Bean
 	public UserDetailsService userDetailsservice(){
 		
-		UserDetails NormalUser =User
+		UserDetails user =User
 				.withUsername("atm")
 				.password(passwordEncoder().encode("atm@123"))
 				.roles("USER")
 				.build();
 		
-		UserDetails AdminUser = User
+		UserDetails admin= User
 				.withUsername("nilesh")
 				.password(passwordEncoder().encode("nilesh@123"))
 				.roles("ADMIN")
 				.build();
 		
-		InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager(NormalUser,AdminUser);
+		InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager(admin,user);
 		
 				return inMemoryUserDetailsManager; 
 		
@@ -52,9 +50,8 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityConfig(HttpSecurity http) throws Exception {
 			
 		http.authorizeHttpRequests( (req) -> req
-				.requestMatchers("/admin**").hasRole(ADMIN)
-				.requestMatchers("/user").hasAnyRole(ADMIN,USER)
-				.requestMatchers("/").permitAll()
+				.requestMatchers("/admin**").hasRole("ADMIN")
+				.requestMatchers("/user").hasAnyRole("ADMIN","USER")
 				.anyRequest().authenticated()
 		).formLogin();
 		

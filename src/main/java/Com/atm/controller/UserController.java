@@ -17,7 +17,7 @@ import Com.atm.entity.User;
 import Com.atm.service.UserService;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class UserController {
 
     @Autowired
